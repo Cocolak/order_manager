@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="images">
+    <file>images/logo.ico</file>
+    <file>images/mfcomp.jpg</file>
+    <file>images/mfcomp.png</file>
+  </qresource>
+</RCC>
