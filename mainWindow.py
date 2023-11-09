@@ -1,9 +1,13 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
+from PyQt5.QtWidgets import QMessageBox
 import res
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        self.MainWindow = MainWindow
+        self.currentOrderID = None
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 500)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -29,10 +33,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.panel_istWidget)
         self.panel_addButton = QtWidgets.QPushButton(self.panelWidget)
         self.panel_addButton.setObjectName("panel_addButton")
-        self.verticalLayout.addWidget(self.panel_addButton)
-
         self.panel_addButton.clicked.connect(self.panel_addButtonClicked)
-
+        self.verticalLayout.addWidget(self.panel_addButton)
         self.panel_excelPreview = QtWidgets.QPushButton(self.panelWidget)
         self.panel_excelPreview.setObjectName("panel_excelPreview")
         self.verticalLayout.addWidget(self.panel_excelPreview)
@@ -52,7 +54,7 @@ class Ui_MainWindow(object):
         spacerItem1 = QtWidgets.QSpacerItem(153, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.top_logoLabel = QtWidgets.QLabel(self.topWidget)
-        self.top_logoLabel.setMinimumSize(QtCore.QSize(100, 30))
+        self.top_logoLabel.setMinimumSize(QtCore.QSize(120, 40))
         self.top_logoLabel.setMaximumSize(QtCore.QSize(100, 30))
         self.top_logoLabel.setText("")
         self.top_logoLabel.setPixmap(QtGui.QPixmap(":/images/images/mfcomp.png"))
@@ -237,11 +239,9 @@ class Ui_MainWindow(object):
         self.edit_dateLabel.setSizePolicy(sizePolicy)
         self.edit_dateLabel.setObjectName("edit_dateLabel")
         self.edit_dateLayout.addWidget(self.edit_dateLabel, 0, QtCore.Qt.AlignVCenter)
-        self.edit_dateTextEdit = QtWidgets.QPlainTextEdit(self.editContentWidget)
-        self.edit_dateTextEdit.setMinimumSize(QtCore.QSize(150, 30))
-        self.edit_dateTextEdit.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.edit_dateTextEdit.setObjectName("edit_dateTextEdit")
-        self.edit_dateLayout.addWidget(self.edit_dateTextEdit)
+        self.edit_dateLineEdit = QtWidgets.QLineEdit(self.editContentWidget)
+        self.edit_dateLineEdit.setObjectName("edit_dateLineEdit")
+        self.edit_dateLayout.addWidget(self.edit_dateLineEdit)
         self.gridLayout_4.addLayout(self.edit_dateLayout, 1, 1, 1, 1)
         self.edit_usLayout = QtWidgets.QVBoxLayout()
         self.edit_usLayout.setSpacing(8)
@@ -260,11 +260,9 @@ class Ui_MainWindow(object):
         self.edit_modelLabel = QtWidgets.QLabel(self.editContentWidget)
         self.edit_modelLabel.setObjectName("edit_modelLabel")
         self.edit_modelLayout.addWidget(self.edit_modelLabel, 0, QtCore.Qt.AlignVCenter)
-        self.edit_modelTextEdit = QtWidgets.QPlainTextEdit(self.editContentWidget)
-        self.edit_modelTextEdit.setMinimumSize(QtCore.QSize(150, 30))
-        self.edit_modelTextEdit.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.edit_modelTextEdit.setObjectName("edit_modelTextEdit")
-        self.edit_modelLayout.addWidget(self.edit_modelTextEdit)
+        self.edit_modelLineEdit = QtWidgets.QLineEdit(self.editContentWidget)
+        self.edit_modelLineEdit.setObjectName("edit_modelLineEdit")
+        self.edit_modelLayout.addWidget(self.edit_modelLineEdit)
         self.gridLayout_4.addLayout(self.edit_modelLayout, 1, 0, 1, 1)
         self.edit_descLayout = QtWidgets.QVBoxLayout()
         self.edit_descLayout.setSpacing(8)
@@ -283,11 +281,9 @@ class Ui_MainWindow(object):
         self.edit_nrLabel = QtWidgets.QLabel(self.editContentWidget)
         self.edit_nrLabel.setObjectName("edit_nrLabel")
         self.edit_nrLayout.addWidget(self.edit_nrLabel, 0, QtCore.Qt.AlignVCenter)
-        self.edit_nrTextEdit = QtWidgets.QPlainTextEdit(self.editContentWidget)
-        self.edit_nrTextEdit.setMinimumSize(QtCore.QSize(150, 30))
-        self.edit_nrTextEdit.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.edit_nrTextEdit.setObjectName("edit_nrTextEdit")
-        self.edit_nrLayout.addWidget(self.edit_nrTextEdit)
+        self.edit_nrLineEdit = QtWidgets.QLineEdit(self.editContentWidget)
+        self.edit_nrLineEdit.setObjectName("edit_nrLineEdit")
+        self.edit_nrLayout.addWidget(self.edit_nrLineEdit)
         self.gridLayout_4.addLayout(self.edit_nrLayout, 0, 0, 1, 1)
         self.edit_nrtelLayout = QtWidgets.QHBoxLayout()
         self.edit_nrtelLayout.setSpacing(8)
@@ -295,11 +291,9 @@ class Ui_MainWindow(object):
         self.edit_nrtelLabel = QtWidgets.QLabel(self.editContentWidget)
         self.edit_nrtelLabel.setObjectName("edit_nrtelLabel")
         self.edit_nrtelLayout.addWidget(self.edit_nrtelLabel, 0, QtCore.Qt.AlignVCenter)
-        self.edit_nrtelTextEdit = QtWidgets.QPlainTextEdit(self.editContentWidget)
-        self.edit_nrtelTextEdit.setMinimumSize(QtCore.QSize(150, 30))
-        self.edit_nrtelTextEdit.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.edit_nrtelTextEdit.setObjectName("edit_nrtelTextEdit")
-        self.edit_nrtelLayout.addWidget(self.edit_nrtelTextEdit)
+        self.edit_nrtelLineEdit = QtWidgets.QLineEdit(self.editContentWidget)
+        self.edit_nrtelLineEdit.setObjectName("edit_nrtelLineEdit")
+        self.edit_nrtelLayout.addWidget(self.edit_nrtelLineEdit)
         self.gridLayout_4.addLayout(self.edit_nrtelLayout, 0, 1, 1, 1)
         self.verticalLayout_10.addWidget(self.editContentWidget)
         self.editbuttonsWidget = QtWidgets.QWidget(self.editPage)
@@ -341,11 +335,9 @@ class Ui_MainWindow(object):
         self.add_nrtelLabel = QtWidgets.QLabel(self.addContentWidget)
         self.add_nrtelLabel.setObjectName("add_nrtelLabel")
         self.add_nrtelLayout.addWidget(self.add_nrtelLabel, 0, QtCore.Qt.AlignVCenter)
-        self.add_nrtelTextEdit = QtWidgets.QPlainTextEdit(self.addContentWidget)
-        self.add_nrtelTextEdit.setMinimumSize(QtCore.QSize(150, 30))
-        self.add_nrtelTextEdit.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.add_nrtelTextEdit.setObjectName("add_nrtelTextEdit")
-        self.add_nrtelLayout.addWidget(self.add_nrtelTextEdit)
+        self.add_nrtelLineEdit = QtWidgets.QLineEdit(self.addContentWidget)
+        self.add_nrtelLineEdit.setObjectName("add_nrtelLineEdit")
+        self.add_nrtelLayout.addWidget(self.add_nrtelLineEdit)
         self.gridLayout_2.addLayout(self.add_nrtelLayout, 0, 0, 1, 1)
         self.add_modelLayout = QtWidgets.QHBoxLayout()
         self.add_modelLayout.setSpacing(8)
@@ -358,11 +350,9 @@ class Ui_MainWindow(object):
         self.add_modelLabel.setSizePolicy(sizePolicy)
         self.add_modelLabel.setObjectName("add_modelLabel")
         self.add_modelLayout.addWidget(self.add_modelLabel, 0, QtCore.Qt.AlignVCenter)
-        self.add_modelTextEdit = QtWidgets.QPlainTextEdit(self.addContentWidget)
-        self.add_modelTextEdit.setMinimumSize(QtCore.QSize(150, 30))
-        self.add_modelTextEdit.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.add_modelTextEdit.setObjectName("add_modelTextEdit")
-        self.add_modelLayout.addWidget(self.add_modelTextEdit)
+        self.add_modelLineEdit = QtWidgets.QLineEdit(self.addContentWidget)
+        self.add_modelLineEdit.setObjectName("add_modelLineEdit")
+        self.add_modelLayout.addWidget(self.add_modelLineEdit)
         self.gridLayout_2.addLayout(self.add_modelLayout, 0, 1, 1, 1)
         self.add_descLayout = QtWidgets.QVBoxLayout()
         self.add_descLayout.setSpacing(8)
@@ -401,6 +391,7 @@ class Ui_MainWindow(object):
         self.add_confirmButton.setSizePolicy(sizePolicy)
         self.add_confirmButton.setMinimumSize(QtCore.QSize(100, 30))
         self.add_confirmButton.setObjectName("add_confirmButton")
+        self.add_confirmButton.clicked.connect(self.add_confirmClicked)
         self.horizontalLayout_3.addWidget(self.add_confirmButton)
         self.add_cancelButton = QtWidgets.QPushButton(self.addButtonsWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -409,6 +400,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.add_cancelButton.sizePolicy().hasHeightForWidth())
         self.add_cancelButton.setSizePolicy(sizePolicy)
         self.add_cancelButton.setMinimumSize(QtCore.QSize(100, 30))
+        self.add_cancelButton.clicked.connect(self.add_cancelClicked)
         self.add_cancelButton.setObjectName("add_cancelButton")
         self.horizontalLayout_3.addWidget(self.add_cancelButton)
         spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -422,11 +414,10 @@ class Ui_MainWindow(object):
         # 3 - addPage
         self.stackedWidget.addWidget(self.addPage)
         self.gridLayout.addWidget(self.stackedWidget, 1, 1, 1, 1)
-        self.stackedWidget.setCurrentIndex(0)
-
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -436,7 +427,6 @@ class Ui_MainWindow(object):
         self.panel_addButton.setText(_translate("MainWindow", "DODAJ ZLECENIE"))
         self.panel_excelPreview.setText(_translate("MainWindow", "PODGLĄD EXCELA"))
         self.top_actualLabel.setText(_translate("MainWindow", "Wybrane zlecenie: "))
-
         self.info_dateLabel.setText(_translate("MainWindow", "Data przyjęcia:"))
         self.info_dateContentLabel.setText(_translate("MainWindow", "-"))
         self.info_usLabel.setText(_translate("MainWindow", "Dla nas:"))
@@ -450,7 +440,6 @@ class Ui_MainWindow(object):
         self.info_printButton.setText(_translate("MainWindow", "DRUKUJ"))
         self.info_editButton.setText(_translate("MainWindow", "EDYTUJ"))
         self.info_removeButton.setText(_translate("MainWindow", "USUŃ"))
-
         self.edit_dateLabel.setText(_translate("MainWindow", "Data przyjęcia:"))
         self.edit_usLabel.setText(_translate("MainWindow", "Dla nas:"))
         self.edit_modelLabel.setText(_translate("MainWindow", "Model:"))
@@ -459,7 +448,6 @@ class Ui_MainWindow(object):
         self.edit_nrtelLabel.setText(_translate("MainWindow", "Nr. Telefonu:"))
         self.edit_saveButton.setText(_translate("MainWindow", "ZAPISZ"))
         self.edit_cancelButton.setText(_translate("MainWindow", "ANULUJ"))
-
         self.add_nrtelLabel.setText(_translate("MainWindow", "Nr. Telefonu"))
         self.add_modelLabel.setText(_translate("MainWindow", "Model:"))
         self.add_descLabel.setText(_translate("MainWindow", "Opis zlecenia:"))
@@ -469,4 +457,77 @@ class Ui_MainWindow(object):
 
     def panel_addButtonClicked(self):
         #TODO: jeżeli jest włączone okno edycji (2) to zapytaj czy chcesz zapisać edycje i przejść do dodawania
-        self.stackedWidget.setCurrentIndex(3)
+        nr = open("_dane/nr.txt").readline()
+
+        def clearAddWindow():
+            self.add_nrtelLineEdit.clear()
+            self.add_modelLineEdit.clear()
+            self.add_descTextEdit.clear()
+            self.add_usTextEdit.clear()
+
+        if self.stackedWidget.currentIndex() == 3:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Question)
+            msg.setWindowTitle("Czyszczenie")
+            msg.setText(f"Chcesz wyczyścić aktualny postęp dodawania zlecenia?")
+            msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msg.setDefaultButton(QMessageBox.No)
+            odp = msg.exec_()
+
+            if odp == QMessageBox.Yes:
+                clearAddWindow()
+        else:
+            self.top_actualLabel.setText(f"Dodawanie zlecenia nr. {nr}")
+            self.stackedWidget.setCurrentIndex(3)
+            clearAddWindow()
+
+
+    def add_confirmClicked(self):
+        from openpyxl import load_workbook
+        from datetime import datetime
+
+        nr = int(open("_dane/nr.txt", "r").readline())
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Question)
+        msg.setWindowTitle("Zapisywanie")
+        msg.setText(f"Chcesz zapisać zlecenie nr {nr}?")
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setDefaultButton(QMessageBox.No)
+        odp = msg.exec_()
+
+        if odp == QtWidgets.QMessageBox.Yes:
+            nrtel = self.add_nrtelLineEdit.text()
+            model = self.add_modelLineEdit.text()
+            desc = self.add_descTextEdit.toPlainText()
+            us = self.add_usTextEdit.toPlainText()
+            date = datetime.today().strftime("%d/%m/%Y")
+
+            myFileName = "_dane/dane.xlsx"
+            wb = load_workbook(filename=myFileName)
+            ws = wb["Sheet1"]
+            ws.append(["nie", nr, nrtel, model, date, desc, us])
+            wb.save(filename=myFileName)
+            wb.close()
+
+            with open('_dane/nr.txt', "w") as file:
+                file.write(str(nr+1))
+
+            self.currentOrderID = nr
+            self.stackedWidget.setCurrentIndex(0)
+            #TODO: open infoPage
+
+    def add_cancelClicked(self):
+        nr = open("_dane/nr.txt").readline()
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Question)
+        msg.setWindowTitle("Anulowanie")
+        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {nr}?")
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setDefaultButton(QMessageBox.No)
+        odp = msg.exec_()
+
+        if odp == QMessageBox.Yes:
+            self.top_actualLabel.setText(f"Strona główna")
+            self.stackedWidget.setCurrentIndex(0)

@@ -477,20 +477,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPlainTextEdit" name="edit_dateTextEdit">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="edit_dateLineEdit"/>
              </item>
             </layout>
            </item>
@@ -531,20 +518,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPlainTextEdit" name="edit_modelTextEdit">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="edit_modelLineEdit"/>
              </item>
             </layout>
            </item>
@@ -585,20 +559,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPlainTextEdit" name="edit_nrTextEdit">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="edit_nrLineEdit"/>
              </item>
             </layout>
            </item>
@@ -615,20 +576,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPlainTextEdit" name="edit_nrtelTextEdit">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="edit_nrtelLineEdit"/>
              </item>
             </layout>
            </item>
@@ -725,20 +673,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPlainTextEdit" name="add_nrtelTextEdit">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="add_nrtelLineEdit"/>
              </item>
             </layout>
            </item>
@@ -761,20 +696,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPlainTextEdit" name="add_modelTextEdit">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="add_modelLineEdit"/>
              </item>
             </layout>
            </item>
