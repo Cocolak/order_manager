@@ -10,10 +10,13 @@ class Ui_MainWindow(object):
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 500)
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
+
+        # Panel
         self.panelWidget = QtWidgets.QWidget(self.centralwidget)
         self.panelWidget.setMaximumSize(QtCore.QSize(150, 16777215))
         self.panelWidget.setObjectName("panelWidget")
@@ -39,6 +42,8 @@ class Ui_MainWindow(object):
         self.panel_excelPreview.setObjectName("panel_excelPreview")
         self.verticalLayout.addWidget(self.panel_excelPreview)
         self.gridLayout.addWidget(self.panelWidget, 0, 0, 2, 1)
+
+        # Top Widget
         self.topWidget = QtWidgets.QWidget(self.centralwidget)
         self.topWidget.setObjectName("topWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.topWidget)
@@ -62,11 +67,17 @@ class Ui_MainWindow(object):
         self.top_logoLabel.setObjectName("top_logoLabel")
         self.horizontalLayout.addWidget(self.top_logoLabel)
         self.gridLayout.addWidget(self.topWidget, 0, 1, 1, 1)
+
+        # Pages
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
         self.stackedWidget.setObjectName("stackedWidget")
+
+            # homePage
         self.homePage = QtWidgets.QWidget()
         self.homePage.setObjectName("homePage")
         self.stackedWidget.addWidget(self.homePage)
+
+            # infoPage
         self.infoPage = QtWidgets.QWidget()
         self.infoPage.setObjectName("infoPage")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.infoPage)
@@ -218,6 +229,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.addItem(spacerItem3)
         self.verticalLayout_7.addWidget(self.infoButtonsWidget)
         self.stackedWidget.addWidget(self.infoPage)
+
+            # editPage
         self.editPage = QtWidgets.QWidget()
         self.editPage.setObjectName("editPage")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.editPage)
@@ -319,6 +332,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_15.addItem(spacerItem5)
         self.verticalLayout_10.addWidget(self.editbuttonsWidget)
         self.stackedWidget.addWidget(self.editPage)
+
+            # addPage
         self.addPage = QtWidgets.QWidget()
         self.addPage.setObjectName("addPage")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.addPage)
@@ -416,6 +431,8 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.stackedWidget, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
+        self.loadListWidget()
+
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -454,6 +471,24 @@ class Ui_MainWindow(object):
         self.add_usLabel.setText(_translate("MainWindow", "Dla nas:"))
         self.add_confirmButton.setText(_translate("MainWindow", "POTWIERDŹ"))
         self.add_cancelButton.setText(_translate("MainWindow", "ANULUJ"))
+
+    def loadListWidget(self):
+        import pandas as pd
+
+        df = pd.read_excel("_dane/dane.xlsx")
+        df = df.sort_values(["Zlecenie"], ascending=[False])
+        ordersIDs = df["Zlecenie"].tolist()
+        ready = pd.read_excel("_dane/dane.xlsx", index_col="Zlecenie")["Gotowe"]
+        #TODO zwiększ wielkość elementów listy
+
+        for o in ordersIDs:
+            item = QtWidgets.QListWidgetItem(str(o))
+            if ready[o] == "nie":
+                item.setBackground(QtGui.QColor("red"))
+            elif ready[o] == "tak":
+                item.setBackground(QtGui.QColor("green"))
+            self.panel_istWidget.addItem(item)
+
 
     def panel_addButtonClicked(self):
         #TODO: jeżeli jest włączone okno edycji (2) to zapytaj czy chcesz zapisać edycje i przejść do dodawania
