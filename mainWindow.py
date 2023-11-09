@@ -5,6 +5,9 @@ import res
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        self.MainWindow = MainWindow
+        self.currentOrderID = None
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 500)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -397,6 +400,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.add_cancelButton.sizePolicy().hasHeightForWidth())
         self.add_cancelButton.setSizePolicy(sizePolicy)
         self.add_cancelButton.setMinimumSize(QtCore.QSize(100, 30))
+        self.add_cancelButton.clicked.connect(self.add_cancelClicked)
         self.add_cancelButton.setObjectName("add_cancelButton")
         self.horizontalLayout_3.addWidget(self.add_cancelButton)
         spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -454,11 +458,35 @@ class Ui_MainWindow(object):
     def panel_addButtonClicked(self):
         #TODO: jeżeli jest włączone okno edycji (2) to zapytaj czy chcesz zapisać edycje i przejść do dodawania
         nr = open("_dane/nr.txt").readline()
-        self.top_actualLabel.setText(f"Dodawanie zlecenia nr. {nr}")
-        self.stackedWidget.setCurrentIndex(3)
+
+        def clearAddWindow():
+            self.add_nrtelLineEdit.clear()
+            self.add_modelLineEdit.clear()
+            self.add_descTextEdit.clear()
+            self.add_usTextEdit.clear()
+
+        if self.stackedWidget.currentIndex() == 3:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Question)
+            msg.setWindowTitle("Czyszczenie")
+            msg.setText(f"Chcesz wyczyścić aktualny postęp dodawania zlecenia?")
+            msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msg.setDefaultButton(QMessageBox.No)
+            odp = msg.exec_()
+
+            if odp == QMessageBox.Yes:
+                clearAddWindow()
+        else:
+            self.top_actualLabel.setText(f"Dodawanie zlecenia nr. {nr}")
+            self.stackedWidget.setCurrentIndex(3)
+            clearAddWindow()
+
 
     def add_confirmClicked(self):
-        nr = open("_dane/nr.txt").readline()
+        from openpyxl import load_workbook
+        from datetime import datetime
+
+        nr = int(open("_dane/nr.txt", "r").readline())
 
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Question)
@@ -473,5 +501,33 @@ class Ui_MainWindow(object):
             model = self.add_modelLineEdit.text()
             desc = self.add_descTextEdit.toPlainText()
             us = self.add_usTextEdit.toPlainText()
+            date = datetime.today().strftime("%d/%m/%Y")
 
-        
+            myFileName = "_dane/dane.xlsx"
+            wb = load_workbook(filename=myFileName)
+            ws = wb["Sheet1"]
+            ws.append(["nie", nr, nrtel, model, date, desc, us])
+            wb.save(filename=myFileName)
+            wb.close()
+
+            with open('_dane/nr.txt', "w") as file:
+                file.write(str(nr+1))
+
+            self.currentOrderID = nr
+            self.stackedWidget.setCurrentIndex(0)
+            #TODO: open infoPage
+
+    def add_cancelClicked(self):
+        nr = open("_dane/nr.txt").readline()
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Question)
+        msg.setWindowTitle("Anulowanie")
+        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {nr}?")
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setDefaultButton(QMessageBox.No)
+        odp = msg.exec_()
+
+        if odp == QMessageBox.Yes:
+            self.top_actualLabel.setText(f"Strona główna")
+            self.stackedWidget.setCurrentIndex(0)
