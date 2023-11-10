@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from PyQt5.QtWidgets import QMessageBox
+import pandas as pd
 import res
 
 
@@ -22,18 +23,20 @@ class Ui_MainWindow(object):
         self.panelWidget.setObjectName("panelWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.panelWidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.panel_searchTextEdit = QtWidgets.QPlainTextEdit(self.panelWidget)
+        self.panel_searchLineEdit = QtWidgets.QLineEdit(self.panelWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.panel_searchTextEdit.sizePolicy().hasHeightForWidth())
-        self.panel_searchTextEdit.setSizePolicy(sizePolicy)
-        self.panel_searchTextEdit.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.panel_searchTextEdit.setObjectName("panel_searchTextEdit")
-        self.verticalLayout.addWidget(self.panel_searchTextEdit)
-        self.panel_istWidget = QtWidgets.QListWidget(self.panelWidget)
-        self.panel_istWidget.setObjectName("panel_istWidget")
-        self.verticalLayout.addWidget(self.panel_istWidget)
+        sizePolicy.setHeightForWidth(self.panel_searchLineEdit.sizePolicy().hasHeightForWidth())
+        self.panel_searchLineEdit.setSizePolicy(sizePolicy)
+        self.panel_searchLineEdit.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.panel_searchLineEdit.textChanged.connect(self.loadListWidget)
+        self.panel_searchLineEdit.setObjectName("panel_searchLineEdit")
+        self.verticalLayout.addWidget(self.panel_searchLineEdit)
+        self.panel_listWidget = QtWidgets.QListWidget(self.panelWidget)
+        self.panel_listWidget.itemClicked.connect(self.panel_openInfoWindow)
+        self.panel_listWidget.setObjectName("panel_listWidget")
+        self.verticalLayout.addWidget(self.panel_listWidget)
         self.panel_addButton = QtWidgets.QPushButton(self.panelWidget)
         self.panel_addButton.setObjectName("panel_addButton")
         self.panel_addButton.clicked.connect(self.panel_addButtonClicked)
@@ -201,6 +204,9 @@ class Ui_MainWindow(object):
         self.infoButtonsWidget.setObjectName("infoButtonsWidget")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.infoButtonsWidget)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.info_isReadyCheckBox = QtWidgets.QCheckBox(self.infoButtonsWidget)
+        self.info_isReadyCheckBox.setObjectName("info_isReadyCheckBox")
+        self.horizontalLayout_8.addWidget(self.info_isReadyCheckBox)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem2)
         self.info_printButton = QtWidgets.QPushButton(self.infoButtonsWidget)
@@ -440,10 +446,10 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.panel_searchTextEdit.setPlaceholderText(_translate("MainWindow", "Szukaj..."))
+        self.panel_searchLineEdit.setPlaceholderText(_translate("MainWindow", "Szukaj..."))
         self.panel_addButton.setText(_translate("MainWindow", "DODAJ ZLECENIE"))
         self.panel_excelPreview.setText(_translate("MainWindow", "PODGLĄD EXCELA"))
-        self.top_actualLabel.setText(_translate("MainWindow", "Wybrane zlecenie: "))
+        self.top_actualLabel.setText(_translate("MainWindow", "Strona główna"))
         self.info_dateLabel.setText(_translate("MainWindow", "Data przyjęcia:"))
         self.info_dateContentLabel.setText(_translate("MainWindow", "-"))
         self.info_usLabel.setText(_translate("MainWindow", "Dla nas:"))
@@ -454,6 +460,7 @@ class Ui_MainWindow(object):
         self.info_nrContentLabel.setText(_translate("MainWindow", "-"))
         self.info_nrtelLabel.setText(_translate("MainWindow", "Nr. Telefonu:"))
         self.info_nrtelContentLabel.setText(_translate("MainWindow", "-"))
+        self.info_isReadyCheckBox.setText(_translate("MainWindow", "Gotowe"))
         self.info_printButton.setText(_translate("MainWindow", "DRUKUJ"))
         self.info_editButton.setText(_translate("MainWindow", "EDYTUJ"))
         self.info_removeButton.setText(_translate("MainWindow", "USUŃ"))
@@ -473,34 +480,61 @@ class Ui_MainWindow(object):
         self.add_cancelButton.setText(_translate("MainWindow", "ANULUJ"))
 
     def loadListWidget(self):
-        import pandas as pd
+        self.panel_listWidget.clear()
 
-        df = pd.read_excel("_dane/dane.xlsx")
-        df = df.sort_values(["Zlecenie"], ascending=[False])
-        ordersIDs = df["Zlecenie"].tolist()
-        ready = pd.read_excel("_dane/dane.xlsx", index_col="Zlecenie")["Gotowe"]
         #TODO zwiększ wielkość elementów listy
+        #TODO: gdy na początku "+" szukaj po numerze tel.
 
+        # Load data from file
+        df = pd.read_excel("_dane/dane.xlsx")
+        sorted_df = df.sort_values(["Zlecenie"], ascending=[False])
+        ordersIDs = sorted_df["Zlecenie"].tolist() # Orders IDs descending sorted
+        ready = pd.read_excel("_dane/dane.xlsx", index_col="Zlecenie")["Gotowe"] # Is order ready nie/tak
+        searchData = self.panel_searchLineEdit.text() # Data from searching bar
+
+        # Loading data to QListWidget
         for o in ordersIDs:
-            item = QtWidgets.QListWidgetItem(str(o))
-            if ready[o] == "nie":
-                item.setBackground(QtGui.QColor("red"))
-            elif ready[o] == "tak":
-                item.setBackground(QtGui.QColor("green"))
-            self.panel_istWidget.addItem(item)
+            if searchData in str(o):
+                item = QtWidgets.QListWidgetItem(str(o))
+                if ready[o] == "nie":
+                    item.setBackground(QtGui.QColor("red"))
+                elif ready[o] == "tak":
+                    item.setBackground(QtGui.QColor("green"))
+                self.panel_listWidget.addItem(item)
 
+    def panel_openInfoWindow(self, item):
+        nr = self.panel_listWidget.selectedItems()[0].text()
+        
+        # Preparing window
+        self.top_actualLabel.setText(f"Wybrane zlecenie: {nr}")
+        self.stackedWidget.setCurrentIndex(1)
+
+        # Load data from file to window
+        df = pd.read_excel("_dane/dane.xlsx")
+        data = df.loc[df["Zlecenie"] == int(nr)].reset_index()
+        self.info_nrContentLabel.setText(str(data["Zlecenie"][0]))
+        self.info_nrtelContentLabel.setText(str(data["Nrtel"][0]))
+        self.info_modelContentLabel.setText(str(data["Model"][0]))
+        self.info_dateContentLabel.setText(str(data["Data"][0]))
+        self.info_descTextEdit.setText(str(data["Opis"][0]))
+        self.info_usTextEdit.setText(str(data["Dlanas"][0]))
+
+        if str(data["Gotowe"][0]) == "tak":
+            self.info_isReadyCheckBox.setChecked(True)
+        else:
+            self.info_isReadyCheckBox.setChecked(False)
 
     def panel_addButtonClicked(self):
         #TODO: jeżeli jest włączone okno edycji (2) to zapytaj czy chcesz zapisać edycje i przejść do dodawania
         nr = open("_dane/nr.txt").readline()
 
-        def clearAddWindow():
+        def clearWindow():
             self.add_nrtelLineEdit.clear()
             self.add_modelLineEdit.clear()
             self.add_descTextEdit.clear()
             self.add_usTextEdit.clear()
 
-        if self.stackedWidget.currentIndex() == 3:
+        if self.stackedWidget.currentIndex() == 3: # Check if the user isn't already adding the order
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Question)
             msg.setWindowTitle("Czyszczenie")
@@ -508,13 +542,14 @@ class Ui_MainWindow(object):
             msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
             msg.setDefaultButton(QMessageBox.No)
             odp = msg.exec_()
-
+ 
             if odp == QMessageBox.Yes:
-                clearAddWindow()
-        else:
+                clearWindow()
+
+        else: # If not open addPage
             self.top_actualLabel.setText(f"Dodawanie zlecenia nr. {nr}")
             self.stackedWidget.setCurrentIndex(3)
-            clearAddWindow()
+            clearWindow()
 
 
     def add_confirmClicked(self):
