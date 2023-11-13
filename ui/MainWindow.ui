@@ -135,7 +135,7 @@
     <item row="1" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="homePage"/>
       <widget class="QWidget" name="infoPage">
@@ -365,6 +365,13 @@
         <item>
          <widget class="QWidget" name="infoButtonsWidget" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <widget class="QCheckBox" name="info_isReadyCheckBox">
+             <property name="text">
+              <string>Gotowe</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <spacer name="info_horizontalSpacer_1">
              <property name="orientation">
