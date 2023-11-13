@@ -111,7 +111,7 @@ class Ui_MainWindow(object):
         self.info_dateContentLabel.setSizePolicy(sizePolicy)
         self.info_dateContentLabel.setObjectName("info_dateContentLabel")
         self.info_dateLayout.addWidget(self.info_dateContentLabel)
-        self.gridLayout_3.addLayout(self.info_dateLayout, 1, 1, 1, 1)
+        self.gridLayout_3.addLayout(self.info_dateLayout, 0, 1, 1, 1)
         self.info_usLayout = QtWidgets.QVBoxLayout()
         self.info_usLayout.setSpacing(8)
         self.info_usLayout.setObjectName("info_usLayout")
@@ -198,7 +198,7 @@ class Ui_MainWindow(object):
         self.info_nrtelContentLabel.setSizePolicy(sizePolicy)
         self.info_nrtelContentLabel.setObjectName("info_nrtelContentLabel")
         self.info_nrtelLayout.addWidget(self.info_nrtelContentLabel)
-        self.gridLayout_3.addLayout(self.info_nrtelLayout, 0, 1, 1, 1)
+        self.gridLayout_3.addLayout(self.info_nrtelLayout, 1, 1, 1, 1)
         self.verticalLayout_7.addWidget(self.infoContentWidget)
         self.infoButtonsWidget = QtWidgets.QWidget(self.infoPage)
         self.infoButtonsWidget.setObjectName("infoButtonsWidget")
@@ -220,6 +220,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.info_editButton.sizePolicy().hasHeightForWidth())
         self.info_editButton.setSizePolicy(sizePolicy)
         self.info_editButton.setMinimumSize(QtCore.QSize(100, 30))
+        self.info_editButton.clicked.connect(self.editButtonClicked)
         self.info_editButton.setObjectName("info_editButton")
         self.horizontalLayout_8.addWidget(self.info_editButton)
         self.info_removeButton = QtWidgets.QPushButton(self.infoButtonsWidget)
@@ -259,9 +260,10 @@ class Ui_MainWindow(object):
         self.edit_dateLabel.setObjectName("edit_dateLabel")
         self.edit_dateLayout.addWidget(self.edit_dateLabel, 0, QtCore.Qt.AlignVCenter)
         self.edit_dateLineEdit = QtWidgets.QLineEdit(self.editContentWidget)
+        self.edit_dateLineEdit.setReadOnly(True)
         self.edit_dateLineEdit.setObjectName("edit_dateLineEdit")
         self.edit_dateLayout.addWidget(self.edit_dateLineEdit)
-        self.gridLayout_4.addLayout(self.edit_dateLayout, 1, 1, 1, 1)
+        self.gridLayout_4.addLayout(self.edit_dateLayout, 0, 1, 1, 1)
         self.edit_usLayout = QtWidgets.QVBoxLayout()
         self.edit_usLayout.setSpacing(8)
         self.edit_usLayout.setObjectName("edit_usLayout")
@@ -301,6 +303,7 @@ class Ui_MainWindow(object):
         self.edit_nrLabel.setObjectName("edit_nrLabel")
         self.edit_nrLayout.addWidget(self.edit_nrLabel, 0, QtCore.Qt.AlignVCenter)
         self.edit_nrLineEdit = QtWidgets.QLineEdit(self.editContentWidget)
+        self.edit_nrLineEdit.setReadOnly(True)
         self.edit_nrLineEdit.setObjectName("edit_nrLineEdit")
         self.edit_nrLayout.addWidget(self.edit_nrLineEdit)
         self.gridLayout_4.addLayout(self.edit_nrLayout, 0, 0, 1, 1)
@@ -313,30 +316,35 @@ class Ui_MainWindow(object):
         self.edit_nrtelLineEdit = QtWidgets.QLineEdit(self.editContentWidget)
         self.edit_nrtelLineEdit.setObjectName("edit_nrtelLineEdit")
         self.edit_nrtelLayout.addWidget(self.edit_nrtelLineEdit)
-        self.gridLayout_4.addLayout(self.edit_nrtelLayout, 0, 1, 1, 1)
+        self.gridLayout_4.addLayout(self.edit_nrtelLayout, 1, 1, 1, 1)
         self.verticalLayout_10.addWidget(self.editContentWidget)
-        self.editbuttonsWidget = QtWidgets.QWidget(self.editPage)
-        self.editbuttonsWidget.setObjectName("editbuttonsWidget")
-        self.horizontalLayout_15 = QtWidgets.QHBoxLayout(self.editbuttonsWidget)
+        self.editButtonsWidget = QtWidgets.QWidget(self.editPage)
+        self.editButtonsWidget.setObjectName("editbuttonsWidget")
+        self.horizontalLayout_15 = QtWidgets.QHBoxLayout(self.editButtonsWidget)
         self.horizontalLayout_15.setObjectName("horizontalLayout_15")
+        self.edit_isReadyCheckBox = QtWidgets.QCheckBox(self.editButtonsWidget)
+        self.edit_isReadyCheckBox.setObjectName("edit_isReadyCheckBox")
+        self.horizontalLayout_15.addWidget(self.edit_isReadyCheckBox)
         spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_15.addItem(spacerItem4)
-        self.edit_saveButton = QtWidgets.QPushButton(self.editbuttonsWidget)
+        self.edit_saveButton = QtWidgets.QPushButton(self.editButtonsWidget)
         self.edit_saveButton.setMinimumSize(QtCore.QSize(100, 30))
+        self.edit_saveButton.clicked.connect(self.edit_saveButtonClicked)
         self.edit_saveButton.setObjectName("edit_saveButton")
         self.horizontalLayout_15.addWidget(self.edit_saveButton)
-        self.edit_cancelButton = QtWidgets.QPushButton(self.editbuttonsWidget)
+        self.edit_cancelButton = QtWidgets.QPushButton(self.editButtonsWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.edit_cancelButton.sizePolicy().hasHeightForWidth())
         self.edit_cancelButton.setSizePolicy(sizePolicy)
         self.edit_cancelButton.setMinimumSize(QtCore.QSize(100, 30))
+        self.edit_cancelButton.clicked.connect(self.edit_cancelButtonClicked)
         self.edit_cancelButton.setObjectName("edit_cancelButton")
         self.horizontalLayout_15.addWidget(self.edit_cancelButton)
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_15.addItem(spacerItem5)
-        self.verticalLayout_10.addWidget(self.editbuttonsWidget)
+        self.verticalLayout_10.addWidget(self.editButtonsWidget)
         self.stackedWidget.addWidget(self.editPage)
 
             # addPage
@@ -470,6 +478,7 @@ class Ui_MainWindow(object):
         self.edit_descLabel.setText(_translate("MainWindow", "Opis zlecenia:"))
         self.edit_nrLabel.setText(_translate("MainWindow", "Nr. Zlecenia:"))
         self.edit_nrtelLabel.setText(_translate("MainWindow", "Nr. Telefonu:"))
+        self.edit_isReadyCheckBox.setText(_translate("MainWindow", "Gotowe"))
         self.edit_saveButton.setText(_translate("MainWindow", "ZAPISZ"))
         self.edit_cancelButton.setText(_translate("MainWindow", "ANULUJ"))
         self.add_nrtelLabel.setText(_translate("MainWindow", "Nr. Telefonu"))
@@ -523,6 +532,64 @@ class Ui_MainWindow(object):
             self.info_isReadyCheckBox.setChecked(True)
         else:
             self.info_isReadyCheckBox.setChecked(False)
+            
+
+    def editButtonClicked(self):
+        self.stackedWidget.setCurrentIndex(2)
+        nr = self.panel_listWidget.selectedItems()[0].text()
+
+        # Load data from file to window
+        df = pd.read_excel("_dane/dane.xlsx")
+        data = df.loc[df["Zlecenie"] == int(nr)].reset_index()
+        self.edit_nrLineEdit.setText(str(data["Zlecenie"][0]))
+        self.edit_nrtelLineEdit.setText(str(data["Nrtel"][0]))
+        self.edit_modelLineEdit.setText(str(data["Model"][0]))
+        self.edit_dateLineEdit.setText(str(data["Data"][0]))
+        self.edit_descTextEdit.setText(str(data["Opis"][0]))
+        self.edit_usTextEdit.setText(str(data["Dlanas"][0]))
+
+        if str(data["Gotowe"][0]) == "tak":
+            self.edit_isReadyCheckBox.setChecked(True)
+        else:
+            self.edit_isReadyCheckBox.setChecked(False)
+
+    def edit_saveButtonClicked(self):
+        nr = self.panel_listWidget.selectedItems()[0].text()
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Question)
+        msg.setWindowTitle("Zapisywanie")
+        msg.setText(f"Chcesz zapisać zlecenie nr {nr}?")
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setDefaultButton(QMessageBox.No)
+        odp = msg.exec_()
+
+        if odp == QtWidgets.QMessageBox.Yes:
+            nrtel = self.edit_nrtelLineEdit.text()
+            model = self.edit_modelLineEdit.text()
+            desc = self.edit_descTextEdit.toPlainText()
+            us = self.edit_usTextEdit.toPlainText()
+
+            if self.edit_isReadyCheckBox.isChecked() == True:
+                ready = "tak"
+            else:
+                ready = "nie"
+        
+        #TODO: Zamiana danych w pliku Excel
+
+    def edit_cancelButtonClicked(self):
+        nr = open("_dane/nr.txt").readline()
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Question)
+        msg.setWindowTitle("Anulowanie")
+        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {nr}?")
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setDefaultButton(QMessageBox.No)
+        odp = msg.exec_()
+
+        if odp == QMessageBox.Yes:
+            self.stackedWidget.setCurrentIndex(1)
 
     def panel_addButtonClicked(self):
         #TODO: jeżeli jest włączone okno edycji (2) to zapytaj czy chcesz zapisać edycje i przejść do dodawania
@@ -601,3 +668,6 @@ class Ui_MainWindow(object):
         if odp == QMessageBox.Yes:
             self.top_actualLabel.setText(f"Strona główna")
             self.stackedWidget.setCurrentIndex(0)
+
+    
+
