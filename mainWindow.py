@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QDialog
 import pandas as pd
 import res
 
@@ -43,6 +43,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.panel_addButton)
         self.panel_excelPreview = QtWidgets.QPushButton(self.panelWidget)
         self.panel_excelPreview.setObjectName("panel_excelPreview")
+        self.panel_excelPreview.clicked.connect(self.panel_excelPreviewClicked)
         self.verticalLayout.addWidget(self.panel_excelPreview)
         self.gridLayout.addWidget(self.panelWidget, 0, 0, 2, 1)
 
@@ -89,7 +90,7 @@ class Ui_MainWindow(object):
         self.infoContentWidget.setObjectName("infoContentWidget")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.infoContentWidget)
         self.gridLayout_3.setHorizontalSpacing(20)
-        self.gridLayout_3.setVerticalSpacing(16)
+        self.gridLayout_3.setVerticalSpacing(10)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.info_dateLayout = QtWidgets.QHBoxLayout()
         self.info_dateLayout.setSpacing(8)
@@ -514,15 +515,18 @@ class Ui_MainWindow(object):
                 self.panel_listWidget.addItem(item)
 
     def panel_openInfoWindow(self):
-        nr = self.panel_listWidget.selectedItems()[0].text()
+        try: self.currentOrderID = self.panel_listWidget.selectedItems()[0].text()
+        except: pass
+        
+        #TODO: Sproawdx czy uzytkownik aktualnie nie jest na etapie dodawania lub edytowania zlecenia
         
         # Preparing window
-        self.top_actualLabel.setText(f"Wybrane zlecenie: {nr}")
+        self.top_actualLabel.setText(f"Wybrane zlecenie: {self.currentOrderID}")
         self.stackedWidget.setCurrentIndex(1)
 
         # Load data from file to window
         df = pd.read_excel("_dane/dane.xlsx")
-        data = df.loc[df["Zlecenie"] == int(nr)].reset_index()
+        data = df.loc[df["Zlecenie"] == int(self.currentOrderID)].reset_index()
         self.info_nrContentLabel.setText(str(data["Zlecenie"][0]))
         self.info_nrtelContentLabel.setText(str(data["Nrtel"][0]))
         self.info_modelContentLabel.setText(str(data["Model"][0]))
@@ -536,16 +540,90 @@ class Ui_MainWindow(object):
             self.info_isReadyCheckBox.setChecked(False)
     
     def info_printButtonClicked(self):
-        #TODO: Dokończ działanie przycisku
-        pass            
+        from docx import Document
+        from docx.shared import Pt, Inches
+        import os
+
+        myfont =  Pt(14)
+
+        document = Document()
+
+        document.add_picture("mfcomp.png", width=Inches(3.5))
+        pict = document.paragraphs[-1]
+        pict.alignment = 1
+
+
+        adres = document.add_paragraph("")
+        adres_name = adres.add_run("37-100 Łańcut\nul. Rynek 31\ntel: 885 727 046")
+        adres_name.italic = True
+        adres.alignment = 1
+        adres.paragraph_format.space_before = Inches(0.3)
+        adres.paragraph_format.space_after = Inches(0.4)
+
+        title = document.add_paragraph("")
+        title_name = title.add_run("Potwierdzenie przyjęcia zlecenia numer: ")
+        title_name.font.size = Pt(17)
+        title_name.bold = True
+        title_value = title.add_run(str(self.nr))
+        title_value.font.size = Pt(17)
+        title_value.bold = True
+        title.alignment = 1
+        #title_value.font.color = RGBColor(255,0,0)
+
+        model = document.add_paragraph("")
+        model_name = model.add_run("Model urządzenia: ")
+        model_name.bold = True
+        model_name.font.size = myfont
+        model_value = model.add_run(str(self.model))
+        model_value.font.size = myfont
+        model.alignment = 1
+        model.paragraph_format.space_before = Inches(1)
+
+
+        data = document.add_paragraph("")
+        data_title = data.add_run("Data przyjęcia: ")
+        data_title.bold = True
+        data_title.font.size = myfont
+        data_value = data.add_run(str(self.date))
+        data_value.font.size = myfont
+        data.alignment = 1
+
+        opis = document.add_paragraph("")
+        opis_title = opis.add_run("Opis: ")
+        opis_title.bold = True
+        opis_title.font.size = myfont
+        opis_value = opis.add_run(str(self.opis))
+        opis_value.font.size = myfont
+        opis.alignment = 1
+
+        otherFont = Pt(16)
+
+        data2 = document.add_paragraph("")
+        data2_title = data2.add_run("Data odbioru: ")
+        data2_title.bold = True
+        data2_title.font.size = otherFont
+        data2.paragraph_format.space_before = Inches(1)
+
+        okres = document.add_paragraph("")
+        okres_title = okres.add_run("Okres gwarancji: ")
+        okres_title.bold = True
+        okres_title.font.size = otherFont
+
+        koszt = document.add_paragraph("")
+        koszt_title = koszt.add_run("Koszt naprawy: ")
+        koszt_title.bold = True
+        koszt_title.font.size = otherFont
+
+        document.save("druk.docx")
+
+        os.startfile("druk.docx", "print")    
 
     def editButtonClicked(self):
         self.stackedWidget.setCurrentIndex(2)
-        nr = self.panel_listWidget.selectedItems()[0].text()
 
         # Load data from file to window
         df = pd.read_excel("_dane/dane.xlsx")
-        data = df.loc[df["Zlecenie"] == int(nr)].reset_index()
+        data = df.loc[df["Zlecenie"] == int(self.currentOrderID)].reset_index()
         self.edit_nrLineEdit.setText(str(data["Zlecenie"][0]))
         self.edit_nrtelLineEdit.setText(str(data["Nrtel"][0]))
         self.edit_modelLineEdit.setText(str(data["Model"][0]))
@@ -563,12 +641,10 @@ class Ui_MainWindow(object):
         pass
 
     def edit_saveButtonClicked(self):
-        nr = self.panel_listWidget.selectedItems()[0].text()
-
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Question)
         msg.setWindowTitle("Zapisywanie")
-        msg.setText(f"Chcesz zapisać zlecenie nr {nr}?")
+        msg.setText(f"Chcesz zapisać zlecenie nr {self.currentOrderID}?")
         msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         msg.setDefaultButton(QMessageBox.No)
         odp = msg.exec_()
@@ -587,7 +663,7 @@ class Ui_MainWindow(object):
 
             # Save changes to Excel file
             df = pd.read_excel("_dane/dane.xlsx")
-            editIndex = df.index[df['Zlecenie'] == int(nr)].tolist()[0]
+            editIndex = df.index[df['Zlecenie'] == int(self.currentOrderID)].tolist()[0]
             df.loc[editIndex, ["Gotowe", "Nrtel", "Model", "Opis", "Dlanas"]] = [ready, nrtel, model, desc, us]
             df.to_excel("_dane/dane.xlsx", sheet_name="Sheet1", index=False)
 
@@ -595,12 +671,10 @@ class Ui_MainWindow(object):
             self.loadListWidget()
 
     def edit_cancelButtonClicked(self):
-        nr = open("_dane/nr.txt").readline()
-
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Question)
         msg.setWindowTitle("Anulowanie")
-        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {nr}?")
+        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {self.currentOrderID}?")
         msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         msg.setDefaultButton(QMessageBox.No)
         odp = msg.exec_()
@@ -610,7 +684,6 @@ class Ui_MainWindow(object):
 
     def panel_addButtonClicked(self):
         #TODO: jeżeli jest włączone okno edycji (2) to zapytaj czy chcesz zapisać edycje i przejść do dodawania
-        nr = open("_dane/nr.txt").readline()
 
         def clearWindow():
             self.add_nrtelLineEdit.clear()
@@ -631,10 +704,9 @@ class Ui_MainWindow(object):
                 clearWindow()
 
         else: # If not open addPage
-            self.top_actualLabel.setText(f"Dodawanie zlecenia nr. {nr}")
+            self.top_actualLabel.setText(f"Dodawanie zlecenia nr. {self.currentOrderID}")
             self.stackedWidget.setCurrentIndex(3)
             clearWindow()
-
 
     def add_confirmClicked(self):
         from openpyxl import load_workbook
@@ -669,15 +741,14 @@ class Ui_MainWindow(object):
 
             self.currentOrderID = nr
             self.stackedWidget.setCurrentIndex(0)
-            #TODO: open infoPage
+            self.loadListWidget()
+            self.panel_openInfoWindow()
 
     def add_cancelClicked(self):
-        nr = open("_dane/nr.txt").readline()
-
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Question)
         msg.setWindowTitle("Anulowanie")
-        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {nr}?")
+        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {self.currentOrderID}?")
         msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         msg.setDefaultButton(QMessageBox.No)
         odp = msg.exec_()
@@ -686,5 +757,11 @@ class Ui_MainWindow(object):
             self.top_actualLabel.setText(f"Strona główna")
             self.stackedWidget.setCurrentIndex(0)
 
-    
+    def panel_excelPreviewClicked(self):
+        from excelPreview import Ui_ExcelPreview
+        window = QDialog()
+        ui = Ui_ExcelPreview()
+        ui.setupUi(window)
+        window.show()
+        window.exec_()
 
