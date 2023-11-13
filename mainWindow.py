@@ -211,6 +211,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.addItem(spacerItem2)
         self.info_printButton = QtWidgets.QPushButton(self.infoButtonsWidget)
         self.info_printButton.setMinimumSize(QtCore.QSize(100, 30))
+        self.info_printButton.clicked.connect(self.info_printButtonClicked)
         self.info_printButton.setObjectName("info_printButton")
         self.horizontalLayout_8.addWidget(self.info_printButton)
         self.info_editButton = QtWidgets.QPushButton(self.infoButtonsWidget)
@@ -230,6 +231,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.info_removeButton.sizePolicy().hasHeightForWidth())
         self.info_removeButton.setSizePolicy(sizePolicy)
         self.info_removeButton.setMinimumSize(QtCore.QSize(100, 30))
+        self.info_removeButton.clicked.connect(self.info_removeButtonClicked)
         self.info_removeButton.setObjectName("info_removeButton")
         self.horizontalLayout_8.addWidget(self.info_removeButton)
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -511,7 +513,7 @@ class Ui_MainWindow(object):
                     item.setBackground(QtGui.QColor("green"))
                 self.panel_listWidget.addItem(item)
 
-    def panel_openInfoWindow(self, item):
+    def panel_openInfoWindow(self):
         nr = self.panel_listWidget.selectedItems()[0].text()
         
         # Preparing window
@@ -532,7 +534,10 @@ class Ui_MainWindow(object):
             self.info_isReadyCheckBox.setChecked(True)
         else:
             self.info_isReadyCheckBox.setChecked(False)
-            
+    
+    def info_printButtonClicked(self):
+        #TODO: Dokończ działanie przycisku
+        pass            
 
     def editButtonClicked(self):
         self.stackedWidget.setCurrentIndex(2)
@@ -552,6 +557,10 @@ class Ui_MainWindow(object):
             self.edit_isReadyCheckBox.setChecked(True)
         else:
             self.edit_isReadyCheckBox.setChecked(False)
+    
+    def info_removeButtonClicked(self):
+        #TODO: Dokończ funkcjonalność przycisku
+        pass
 
     def edit_saveButtonClicked(self):
         nr = self.panel_listWidget.selectedItems()[0].text()
@@ -565,6 +574,7 @@ class Ui_MainWindow(object):
         odp = msg.exec_()
 
         if odp == QtWidgets.QMessageBox.Yes:
+            # Get data from app
             nrtel = self.edit_nrtelLineEdit.text()
             model = self.edit_modelLineEdit.text()
             desc = self.edit_descTextEdit.toPlainText()
@@ -574,8 +584,15 @@ class Ui_MainWindow(object):
                 ready = "tak"
             else:
                 ready = "nie"
-        
-        #TODO: Zamiana danych w pliku Excel
+
+            # Save changes to Excel file
+            df = pd.read_excel("_dane/dane.xlsx")
+            editIndex = df.index[df['Zlecenie'] == int(nr)].tolist()[0]
+            df.loc[editIndex, ["Gotowe", "Nrtel", "Model", "Opis", "Dlanas"]] = [ready, nrtel, model, desc, us]
+            df.to_excel("_dane/dane.xlsx", sheet_name="Sheet1", index=False)
+
+            self.panel_openInfoWindow()
+            self.loadListWidget()
 
     def edit_cancelButtonClicked(self):
         nr = open("_dane/nr.txt").readline()
