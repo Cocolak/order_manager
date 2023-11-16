@@ -3,5 +3,6 @@
     <file>images/logo.ico</file>
     <file>images/mfcomp.jpg</file>
     <file>images/mfcomp.png</file>
+    <file>home.png</file>
   </qresource>
 </RCC>

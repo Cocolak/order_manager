@@ -67,6 +67,17 @@
      <widget class="QWidget" name="topWidget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../res.qrc">
+           <normaloff>:/images/home.png</normaloff>:/images/home.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="top_horizontalSpacer_1">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
