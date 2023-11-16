@@ -10,7 +10,7 @@ class Ui_MainWindow(object):
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 500)
-        MainWindow.setWindowIcon(":/images/images/logo.ico")
+        MainWindow.setWindowIcon(QtGui.QIcon(":/images/images/logo.ico"))
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -451,13 +451,13 @@ class Ui_MainWindow(object):
 
         self.loadListWidget()
 
-        self.retranslateUi(MainWindow)
+        self.retranslateUi()
         self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.MainWindow.setWindowTitle(_translate("MainWindow", "Strona główna"))
         self.panel_searchLineEdit.setPlaceholderText(_translate("MainWindow", "Szukaj..."))
         self.panel_addButton.setText(_translate("MainWindow", "DODAJ ZLECENIE"))
         self.panel_excelPreview.setText(_translate("MainWindow", "PODGLĄD EXCELA"))
@@ -524,6 +524,7 @@ class Ui_MainWindow(object):
         # Preparing window
         self.top_actualLabel.setText(f"Wybrane zlecenie: {self.currentOrderID}")
         self.stackedWidget.setCurrentIndex(1)
+        self.MainWindow.setWindowTitle("Informacje o zleceniu")
 
         # Load data from file to window
         df = pd.read_excel("_dane/dane.xlsx")
@@ -621,6 +622,7 @@ class Ui_MainWindow(object):
 
     def editButtonClicked(self):
         self.stackedWidget.setCurrentIndex(2)
+        self.MainWindow.setWindowTitle("Edycja zlecenia")
 
         # Load data from file to window
         df = pd.read_excel("_dane/dane.xlsx")
@@ -681,7 +683,7 @@ class Ui_MainWindow(object):
         odp = msg.exec_()
 
         if odp == QMessageBox.Yes:
-            self.stackedWidget.setCurrentIndex(1)
+            self.panel_openInfoWindow()
 
     def panel_addButtonClicked(self):
         #TODO: jeżeli jest włączone okno edycji (2) to zapytaj czy chcesz zapisać edycje i przejść do dodawania
@@ -705,8 +707,10 @@ class Ui_MainWindow(object):
                 clearWindow()
 
         else: # If not open addPage
-            self.top_actualLabel.setText(f"Dodawanie zlecenia nr. {self.currentOrderID}")
+            nr = int(open("_dane/nr.txt", "r").readline())
+            self.top_actualLabel.setText(f"Dodawanie zlecenia nr. {nr}")
             self.stackedWidget.setCurrentIndex(3)
+            self.MainWindow.setWindowTitle("Dodawanie zlecenia")
             clearWindow()
 
     def add_confirmClicked(self):
