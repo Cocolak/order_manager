@@ -547,12 +547,22 @@ class Ui_MainWindow(object):
         # Load data from file to window
         df = pd.read_excel("_dane/dane.xlsx")
         data = df.loc[df["Zlecenie"] == int(self.currentOrderID)].reset_index()
+
+        nrtel = str(data["Nrtel"][0])
+        if nrtel == "nan": nrtel = ''
+        model = str(data["Model"][0])
+        if model == "nan": model = ''
+        opis = str(data["Opis"][0])
+        if opis == "nan": opis = ''
+        dlanas = str(data["Dlanas"][0])
+        if dlanas == "nan": dlanas = ''
+
         self.info_nrContentLabel.setText(str(data["Zlecenie"][0]))
-        self.info_nrtelContentLabel.setText(str(data["Nrtel"][0]))
-        self.info_modelContentLabel.setText(str(data["Model"][0]))
+        self.info_nrtelContentLabel.setText(nrtel)
+        self.info_modelContentLabel.setText(model)
         self.info_dateContentLabel.setText(str(data["Data"][0]))
-        self.info_descTextEdit.setText(str(data["Opis"][0]))
-        self.info_usTextEdit.setText(str(data["Dlanas"][0]))
+        self.info_descTextEdit.setText(opis)
+        self.info_usTextEdit.setText(dlanas)
 
         if str(data["Gotowe"][0]) == "tak":
             self.info_isReadyCheckBox.setChecked(True)
@@ -645,12 +655,22 @@ class Ui_MainWindow(object):
         # Load data from file to window
         df = pd.read_excel("_dane/dane.xlsx")
         data = df.loc[df["Zlecenie"] == int(self.currentOrderID)].reset_index()
+
+        nrtel = str(data["Nrtel"][0])
+        if nrtel == "nan": nrtel = ''
+        model = str(data["Model"][0])
+        if model == "nan": model = ''
+        opis = str(data["Opis"][0])
+        if opis == "nan": opis = ''
+        dlanas = str(data["Dlanas"][0])
+        if dlanas == "nan": dlanas = ''
+
         self.edit_nrLineEdit.setText(str(data["Zlecenie"][0]))
-        self.edit_nrtelLineEdit.setText(str(data["Nrtel"][0]))
-        self.edit_modelLineEdit.setText(str(data["Model"][0]))
+        self.edit_nrtelLineEdit.setText(nrtel)
+        self.edit_modelLineEdit.setText(model)
         self.edit_dateLineEdit.setText(str(data["Data"][0]))
-        self.edit_descTextEdit.setText(str(data["Opis"][0]))
-        self.edit_usTextEdit.setText(str(data["Dlanas"][0]))
+        self.edit_descTextEdit.setText(opis)
+        self.edit_usTextEdit.setText(dlanas)
 
         if str(data["Gotowe"][0]) == "tak":
             self.edit_isReadyCheckBox.setChecked(True)
