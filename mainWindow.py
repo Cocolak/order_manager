@@ -12,6 +12,12 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 500)
         MainWindow.setWindowIcon(QtGui.QIcon(":/images/images/logo.ico"))
 
+        # Center window
+        qr = MainWindow.frameGeometry()
+        cp = QtWidgets.QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        MainWindow.move(qr.topLeft())
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
