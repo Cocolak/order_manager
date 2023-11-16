@@ -548,6 +548,7 @@ class Ui_MainWindow(object):
         df = pd.read_excel("_dane/dane.xlsx")
         data = df.loc[df["Zlecenie"] == int(self.currentOrderID)].reset_index()
 
+            # Convert nan to nothing ("")
         nrtel = str(data["Nrtel"][0])
         if nrtel == "nan": nrtel = ''
         model = str(data["Model"][0])
@@ -656,6 +657,7 @@ class Ui_MainWindow(object):
         df = pd.read_excel("_dane/dane.xlsx")
         data = df.loc[df["Zlecenie"] == int(self.currentOrderID)].reset_index()
 
+            # Convert nan to nothing ("")
         nrtel = str(data["Nrtel"][0])
         if nrtel == "nan": nrtel = ''
         model = str(data["Model"][0])
