@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QMessageBox, QDialog
 import pandas as pd
 import res
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         self.MainWindow = MainWindow
@@ -80,6 +79,7 @@ class Ui_MainWindow(object):
         self.homePage = QtWidgets.QWidget()
         self.homePage.setObjectName("homePage")
         self.stackedWidget.addWidget(self.homePage)
+        self.homePageVBoxLayout = QtWidgets.QVBoxLayout(self.homePage)
 
             # infoPage
         self.infoPage = QtWidgets.QWidget()
