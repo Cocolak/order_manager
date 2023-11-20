@@ -41,6 +41,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.panel_searchLineEdit)
         self.panel_listWidget = QtWidgets.QListWidget(self.panelWidget)
         self.panel_listWidget.itemClicked.connect(self.panel_openInfoWindow)
+        self.panel_listWidget.setStyleSheet("font-size: 16px;")
         self.panel_listWidget.setObjectName("panel_listWidget")
         self.verticalLayout.addWidget(self.panel_listWidget)
         self.panel_addButton = QtWidgets.QPushButton(self.panelWidget)
@@ -508,19 +509,30 @@ class Ui_MainWindow(object):
     def loadListWidget(self):
         self.panel_listWidget.clear()
 
-        #TODO: zwiększ wielkość elementów listy
-        #TODO: gdy na początku "+" szukaj po numerze tel.
-
         # Load data from file
         df = pd.read_excel("_dane/dane.xlsx")
         sorted_df = df.sort_values(["Zlecenie"], ascending=[False])
         ordersIDs = sorted_df["Zlecenie"].tolist() # Orders IDs descending sorted
+        ordersPhones = sorted_df["Nrtel"].tolist() # Phone numbers descending sorted
         ready = pd.read_excel("_dane/dane.xlsx", index_col="Zlecenie")["Gotowe"] # Is order ready nie/tak
         searchData = self.panel_searchLineEdit.text() # Data from searching bar
 
+        try: 
+            isNumber = searchData[0] == "+"
+            searchPhone = searchData[1:].replace(" ", "")
+        except: isNumber = False
+
         # Loading data to QListWidget
-        for o in ordersIDs:
-            if searchData in str(o):
+        for o, p in zip(ordersIDs, ordersPhones):
+            if isNumber:
+                if searchPhone in str(p):
+                    item = QtWidgets.QListWidgetItem(str(o))
+                    if ready[o] == "nie":
+                        item.setBackground(QtGui.QColor("red"))
+                    elif ready[o] == "tak":
+                        item.setBackground(QtGui.QColor("green"))
+                    self.panel_listWidget.addItem(item)
+            elif searchData in str(o):
                 item = QtWidgets.QListWidgetItem(str(o))
                 if ready[o] == "nie":
                     item.setBackground(QtGui.QColor("red"))
@@ -530,15 +542,45 @@ class Ui_MainWindow(object):
 
     def homePageClicked(self):
         #TODO: dodaj funkcjonalność
+
+        # Checking if user is not in edit or add window
+        if self.stackedWidget.currentIndex() == 3 or self.stackedWidget.currentIndex() == 2:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Question)
+            msg.setWindowTitle("Przerwanie działania")
+            if self.stackedWidget.currentIndex() == 3:
+                msg.setText(f"Chcesz przerwać dodawanie zlecenia?")
+            elif self.stackedWidget.currentIndex() == 2:
+                msg.setText(f"Chcesz przerwać edytowanie zlecenia?")
+            msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msg.setDefaultButton(QMessageBox.No)
+            odp = msg.exec_()
+
+            if odp == QtWidgets.QMessageBox.No:
+                return
+            
+        # Functionality
         self.stackedWidget.setCurrentIndex(0)
-        pass
 
     def panel_openInfoWindow(self):
         try: self.currentOrderID = self.panel_listWidget.selectedItems()[0].text()
         except: pass
         
-        #TODO: Sproawdx czy uzytkownik aktualnie nie jest na etapie dodawania lub edytowania zlecenia
-        
+        if self.stackedWidget.currentIndex() == 3 or self.stackedWidget.currentIndex() == 2:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Question)
+            msg.setWindowTitle("Przerwanie działania")
+            if self.stackedWidget.currentIndex() == 3:
+                msg.setText(f"Chcesz przerwać dodawanie zlecenia?")
+            elif self.stackedWidget.currentIndex() == 2:
+                msg.setText(f"Chcesz przerwać edytowanie zlecenia?")
+            msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msg.setDefaultButton(QMessageBox.No)
+            odp = msg.exec_()
+
+            if odp == QtWidgets.QMessageBox.No:
+                return
+
         # Preparing window
         self.top_actualLabel.setText(f"Wybrane zlecenie: {self.currentOrderID}")
         self.stackedWidget.setCurrentIndex(1)
@@ -680,8 +722,22 @@ class Ui_MainWindow(object):
             self.edit_isReadyCheckBox.setChecked(False)
     
     def info_removeButtonClicked(self):
-        #TODO: Dokończ funkcjonalność przycisku
-        pass
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Question)
+        msg.setWindowTitle("Usuwanie")
+        msg.setText(f"Czy napewno chcesz usunąć zlecenie nr {self.currentOrderID}?")
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setDefaultButton(QMessageBox.No)
+        odp = msg.exec_()
+
+        if odp == QtWidgets.QMessageBox.Yes:
+            df = pd.read_excel("_dane/dane.xlsx")
+            Index = df.index[df['Zlecenie'] == int(self.currentOrderID)].tolist()[0]
+            df = df.drop(Index)
+            df.to_excel("_dane/dane.xlsx", sheet_name="Sheet1", index=False)
+
+            self.loadListWidget()
+            self.homePageButton()
 
     def edit_saveButtonClicked(self):
         msg = QMessageBox()
@@ -723,10 +779,21 @@ class Ui_MainWindow(object):
         odp = msg.exec_()
 
         if odp == QMessageBox.Yes:
+            self.stackedWidget.setCurrentIndex(1)
             self.panel_openInfoWindow()
 
     def panel_addButtonClicked(self):
-        #TODO: jeżeli jest włączone okno edycji (2) to zapytaj czy chcesz zapisać edycje i przejść do dodawania
+        if self.stackedWidget.currentIndex() == 2:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Question)
+            msg.setWindowTitle("Przerwanie działania")
+            msg.setText(f"Chcesz przerwać edytowanie zlecenia?")
+            msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msg.setDefaultButton(QMessageBox.No)
+            odp = msg.exec_()
+
+            if odp == QtWidgets.QMessageBox.No:
+                return
 
         def clearWindow():
             self.add_nrtelLineEdit.clear()
