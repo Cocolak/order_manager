@@ -95,6 +95,12 @@ class Ui_MainWindow(object):
         self.homePage.setObjectName("homePage")
         self.stackedWidget.addWidget(self.homePage)
         self.homePageVBoxLayout = QtWidgets.QVBoxLayout(self.homePage)
+        self.homeImage = QtWidgets.QLabel(self.topWidget)
+        pixmap = QtGui.QPixmap("images/szeff.png").scaled(600,400)
+        self.homeImage.setPixmap(pixmap)
+        self.homeImage.setObjectName("top_actualLabel")
+        self.homePageVBoxLayout.addWidget(self.homeImage)
+        self.homeImage.setAlignment(QtCore.Qt.AlignCenter)
 
             # infoPage
         self.infoPage = QtWidgets.QWidget()
@@ -621,7 +627,7 @@ class Ui_MainWindow(object):
 
         document = Document()
 
-        document.add_picture("mfcomp.png", width=Inches(3.5))
+        document.add_picture("images/mfcomp.png", width=Inches(3.5))
         pict = document.paragraphs[-1]
         pict.alignment = 1
 
@@ -687,9 +693,9 @@ class Ui_MainWindow(object):
         koszt_title.bold = True
         koszt_title.font.size = otherFont
 
-        document.save("druk.docx")
+        document.save("_dane/druk.docx")
 
-        os.startfile("druk.docx", "print")    
+        os.startfile("_dane/druk.docx", "print")    
 
     def editButtonClicked(self):
         self.stackedWidget.setCurrentIndex(2)
@@ -737,7 +743,7 @@ class Ui_MainWindow(object):
             df.to_excel("_dane/dane.xlsx", sheet_name="Sheet1", index=False)
 
             self.loadListWidget()
-            self.homePageButton()
+            self.homePageClicked()
 
     def edit_saveButtonClicked(self):
         msg = QMessageBox()
@@ -765,9 +771,10 @@ class Ui_MainWindow(object):
             editIndex = df.index[df['Zlecenie'] == int(self.currentOrderID)].tolist()[0]
             df.loc[editIndex, ["Gotowe", "Nrtel", "Model", "Opis", "Dlanas"]] = [ready, nrtel, model, desc, us]
             df.to_excel("_dane/dane.xlsx", sheet_name="Sheet1", index=False)
-
-            self.panel_openInfoWindow()
+            
             self.loadListWidget()
+            self.stackedWidget.setCurrentIndex(1)
+            self.panel_openInfoWindow()
 
     def edit_cancelButtonClicked(self):
         msg = QMessageBox()

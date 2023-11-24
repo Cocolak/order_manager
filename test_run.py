@@ -9,7 +9,7 @@ if __name__ == "__main__":
     window = QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(window)
-    #pywinstyles.change_header_color(window, color="blue")
+    #pywinstyles.change_header_color(window, "aero")
     window.show()
     app.exec_()
     
