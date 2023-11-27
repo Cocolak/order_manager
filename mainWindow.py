@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from PyQt5.QtWidgets import QMessageBox, QDialog
 import pandas as pd
+from qt_material import apply_stylesheet
 import res
 
 class Ui_MainWindow(object):
@@ -22,13 +23,59 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout.setVerticalSpacing(0)
+        self.gridLayout.setContentsMargins(0,0,0,0)
+        self.centralwidget.setStyleSheet(u"QWidget {\n"
+"background-color: #FFFFFF;\n"
+"}\n"
+"QLabel {\n"
+"color: #2185D5;\n"
+"}\n"
+"QPushButton {\n"
+"background-color: #FFFFFF;\n"
+"border: 2px solid #2185D5;\n"
+"border-radius: 7px;\n"
+"color: #2185D5;\n"
+"font-weight: bold;\n"
+"min-height:30px;\n"
+"}\n"
+"QPushButton::hover{\n"
+"background-color: #F3F3F3;\n"
+"}\n"
+"QLineEdit {\n"
+"background-color: #F3F3F3;\n"
+"color: #2185D5;\n"
+"border: none;\n"
+"border-bottom: 2px solid #2185D5;\n"
+"min-height: 25px;\n"
+"}\n"
+"QTextEdit {\n"
+"border: 2px solid #2185D5;\n"
+"border-radius: 6px;\n"
+"background-color: #F3F3F3;\n"
+"color: #2185D5;\n"
+"}\n"
+"QPlainTextEdit {\n"
+"border: 1px solid #F3F3F3;\n"
+"color: #2185D5;\n"
+"}\n"
+"QListWidget {\n"
+"background-color: #F3F3F3;\n"
+"border: none;\n"
+"border-radius: 8px;\n"
+"}\n"
+"QListWidget::item {\n"
+"height:25px;}\n"
+"QCheckBox {\n"
+"color: #2185D5;\n"
+"}\n")
 
         # Panel
         self.panelWidget = QtWidgets.QWidget(self.centralwidget)
         self.panelWidget.setMaximumSize(QtCore.QSize(150, 16777215))
         self.panelWidget.setObjectName("panelWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.panelWidget)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout.setObjectName("verticai ant rlLayout")
         self.panel_searchLineEdit = QtWidgets.QLineEdit(self.panelWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -41,7 +88,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.panel_searchLineEdit)
         self.panel_listWidget = QtWidgets.QListWidget(self.panelWidget)
         self.panel_listWidget.itemClicked.connect(self.panel_openInfoWindow)
-        self.panel_listWidget.setStyleSheet("font-size: 16px;")
+        self.panel_listWidget.setStyleSheet("font-size: 15px;")
         self.panel_listWidget.setObjectName("panel_listWidget")
         self.verticalLayout.addWidget(self.panel_listWidget)
         self.panel_addButton = QtWidgets.QPushButton(self.panelWidget)
@@ -52,7 +99,7 @@ class Ui_MainWindow(object):
         self.panel_excelPreview.setObjectName("panel_excelPreview")
         self.panel_excelPreview.clicked.connect(self.panel_excelPreviewClicked)
         self.verticalLayout.addWidget(self.panel_excelPreview)
-        self.gridLayout.addWidget(self.panelWidget, 0, 0, 2, 1)
+        self.gridLayout.addWidget(self.panelWidget, 0, 0, 3, 1)
 
         # Top Widget
         self.topWidget = QtWidgets.QWidget(self.centralwidget)
@@ -459,6 +506,16 @@ class Ui_MainWindow(object):
         spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem7)
         self.verticalLayout_4.addWidget(self.addButtonsWidget)
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setObjectName("widget")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 3, 3)
+        self.horizontalLayout_2.setSpacing(0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.byKris_label = QtWidgets.QLabel(self.widget)
+        self.byKris_label.setObjectName("byKris_label")
+        self.horizontalLayout_2.addWidget(self.byKris_label, 0, QtCore.Qt.AlignRight)
+        self.gridLayout.addWidget(self.widget, 2, 1, 1, 1)
 
         # ID widgets
         # 0 - homePage
@@ -511,6 +568,7 @@ class Ui_MainWindow(object):
         self.add_usLabel.setText(_translate("MainWindow", "Dla nas:"))
         self.add_confirmButton.setText(_translate("MainWindow", "POTWIERDŹ"))
         self.add_cancelButton.setText(_translate("MainWindow", "ANULUJ"))
+        self.byKris_label.setText(_translate("MainWindow", "By Kris"))
 
     def loadListWidget(self):
         self.panel_listWidget.clear()
@@ -534,16 +592,16 @@ class Ui_MainWindow(object):
                 if searchPhone in str(p):
                     item = QtWidgets.QListWidgetItem(str(o))
                     if ready[o] == "nie":
-                        item.setBackground(QtGui.QColor("red"))
+                        item.setBackground(QtGui.QColor(255,105,98))
                     elif ready[o] == "tak":
-                        item.setBackground(QtGui.QColor("green"))
+                        item.setBackground(QtGui.QColor(122, 189, 145))
                     self.panel_listWidget.addItem(item)
             elif searchData in str(o):
                 item = QtWidgets.QListWidgetItem(str(o))
                 if ready[o] == "nie":
-                    item.setBackground(QtGui.QColor("red"))
+                    item.setBackground(QtGui.QColor(255,105,98))
                 elif ready[o] == "tak":
-                    item.setBackground(QtGui.QColor("green"))
+                    item.setBackground(QtGui.QColor(122, 189, 145))
                 self.panel_listWidget.addItem(item)
 
     def homePageClicked(self):
