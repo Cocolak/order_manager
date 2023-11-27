@@ -72,7 +72,8 @@ class Ui_MainWindow(object):
 
         # Panel
         self.panelWidget = QtWidgets.QWidget(self.centralwidget)
-        self.panelWidget.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.panelWidget.setMinimumWidth(145)
+        self.panelWidget.setMaximumSize(QtCore.QSize(145, 16777215))
         self.panelWidget.setObjectName("panelWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.panelWidget)
         self.verticalLayout.setObjectName("verticai ant rlLayout")
@@ -82,7 +83,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.panel_searchLineEdit.sizePolicy().hasHeightForWidth())
         self.panel_searchLineEdit.setSizePolicy(sizePolicy)
-        self.panel_searchLineEdit.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.panel_searchLineEdit.setMinimumWidth(130)
+        self.panel_searchLineEdit.setMaximumSize(QtCore.QSize(130, 30))
         self.panel_searchLineEdit.textChanged.connect(self.loadListWidget)
         self.panel_searchLineEdit.setObjectName("panel_searchLineEdit")
         self.verticalLayout.addWidget(self.panel_searchLineEdit)
@@ -143,8 +145,7 @@ class Ui_MainWindow(object):
         self.stackedWidget.addWidget(self.homePage)
         self.homePageVBoxLayout = QtWidgets.QVBoxLayout(self.homePage)
         self.homeImage = QtWidgets.QLabel(self.topWidget)
-        pixmap = QtGui.QPixmap("images/szeff.png").scaled(600,400)
-        self.homeImage.setPixmap(pixmap)
+        self.homeImage.setPixmap(QtGui.QPixmap("images/szeff.png").scaled(600,400))
         self.homeImage.setObjectName("top_actualLabel")
         self.homePageVBoxLayout.addWidget(self.homeImage)
         self.homeImage.setAlignment(QtCore.Qt.AlignCenter)
@@ -605,8 +606,6 @@ class Ui_MainWindow(object):
                 self.panel_listWidget.addItem(item)
 
     def homePageClicked(self):
-        #TODO: dodaj funkcjonalność
-
         # Checking if user is not in edit or add window
         if self.stackedWidget.currentIndex() == 3 or self.stackedWidget.currentIndex() == 2:
             msg = QMessageBox()
@@ -922,10 +921,12 @@ class Ui_MainWindow(object):
             self.panel_openInfoWindow()
 
     def add_cancelClicked(self):
+        nr = int(open("_dane/nr.txt", "r").readline())
+
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Question)
         msg.setWindowTitle("Anulowanie")
-        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {self.currentOrderID}?")
+        msg.setText(f"Chcesz anulować zapisywanie zlecenia nr. {nr}?")
         msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         msg.setDefaultButton(QMessageBox.No)
         odp = msg.exec_()
