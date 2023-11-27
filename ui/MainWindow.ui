@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>830</width>
     <height>500</height>
    </rect>
   </property>
@@ -14,37 +14,120 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QWidget {
+background-color: #FFFFFF;
+}
+QLabel {
+color: #2185D5;
+}
+QPushButton {
+background-color: #FFFFFF;
+border: 2px solid #2185D5;
+border-radius: 7px;
+color: #2185D5;
+font-weight: bold;
+min-height:30px;
+}
+QPushButton::hover{
+background-color: #F3F3F3;
+}
+QLineEdit {
+background-color: #F3F3F3;
+color: #2185D5;
+border: none;
+border-bottom: 2px solid #2185D5;
+min-height: 25px;
+}
+QTextEdit {
+border: 2px solid #2185D5;
+border-radius: 6px;
+background-color: #F3F3F3;
+color: #2185D5;
+}
+QPlainTextEdit {
+border: 1px solid #F3F3F3;
+color: #2185D5;
+}
+QListWidget {
+background-color: #F3F3F3;
+border: none;
+border-radius: 8px;
+}
+QListWidget::item {
+height:25px;
+}
+QCheckBox {
+color: #2185D5;
+}
+</string>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
+    <property name="verticalSpacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0" rowspan="2">
      <widget class="QWidget" name="panelWidget" native="true">
       <property name="maximumSize">
        <size>
-        <width>150</width>
+        <width>160</width>
         <height>16777215</height>
        </size>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QPlainTextEdit" name="panel_searchTextEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>30</height>
-          </size>
-         </property>
+        <widget class="QLineEdit" name="panel_searchLineEdit">
          <property name="placeholderText">
           <string>Szukaj...</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="panel_istWidget"/>
+        <widget class="QListWidget" name="panel_istWidget">
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+          <property name="background">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>122</red>
+             <green>189</green>
+             <blue>145</blue>
+            </color>
+           </brush>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>4</string>
+          </property>
+          <property name="background">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>255</red>
+             <green>105</green>
+             <blue>98</blue>
+            </color>
+           </brush>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>5</string>
+          </property>
+         </item>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="panel_addButton">
@@ -71,7 +154,7 @@
          <property name="minimumSize">
           <size>
            <width>50</width>
-           <height>30</height>
+           <height>34</height>
           </size>
          </property>
          <property name="text">
@@ -407,7 +490,7 @@
              <property name="minimumSize">
               <size>
                <width>100</width>
-               <height>30</height>
+               <height>34</height>
               </size>
              </property>
              <property name="text">
@@ -426,7 +509,7 @@
              <property name="minimumSize">
               <size>
                <width>100</width>
-               <height>30</height>
+               <height>34</height>
               </size>
              </property>
              <property name="text">
@@ -445,7 +528,7 @@
              <property name="minimumSize">
               <size>
                <width>100</width>
-               <height>30</height>
+               <height>34</height>
               </size>
              </property>
              <property name="text">
@@ -628,7 +711,7 @@
              <property name="minimumSize">
               <size>
                <width>100</width>
-               <height>30</height>
+               <height>34</height>
               </size>
              </property>
              <property name="text">
@@ -647,8 +730,14 @@
              <property name="minimumSize">
               <size>
                <width>100</width>
-               <height>30</height>
+               <height>34</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
              </property>
              <property name="text">
               <string>ANULUJ</string>
@@ -802,7 +891,7 @@
              <property name="minimumSize">
               <size>
                <width>100</width>
-               <height>30</height>
+               <height>34</height>
               </size>
              </property>
              <property name="text">
@@ -821,7 +910,7 @@
              <property name="minimumSize">
               <size>
                <width>100</width>
-               <height>30</height>
+               <height>34</height>
               </size>
              </property>
              <property name="text">
@@ -847,6 +936,34 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item alignment="Qt::AlignRight">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>By Kris</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>

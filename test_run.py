@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from mainWindow import Ui_MainWindow
 import sys
 #import pywinstyles
+from qt_material import apply_stylesheet
 
 
 if __name__ == "__main__":
@@ -9,7 +10,6 @@ if __name__ == "__main__":
     window = QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(window)
-    #pywinstyles.change_header_color(window, "aero")
     window.show()
     app.exec_()
     
