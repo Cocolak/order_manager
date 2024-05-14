@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from PyQt5.QtWidgets import QMessageBox, QDialog
 import pandas as pd
 from qt_material import apply_stylesheet
+
 import res
 
 class Ui_MainWindow(object):
@@ -145,7 +146,6 @@ class Ui_MainWindow(object):
         self.stackedWidget.addWidget(self.homePage)
         self.homePageVBoxLayout = QtWidgets.QVBoxLayout(self.homePage)
         self.homeImage = QtWidgets.QLabel(self.topWidget)
-        self.homeImage.setPixmap(QtGui.QPixmap("images/szeff.png").scaled(600,400))
         self.homeImage.setObjectName("top_actualLabel")
         self.homePageVBoxLayout.addWidget(self.homeImage)
         self.homeImage.setAlignment(QtCore.Qt.AlignCenter)
@@ -569,7 +569,7 @@ class Ui_MainWindow(object):
         self.add_usLabel.setText(_translate("MainWindow", "Dla nas:"))
         self.add_confirmButton.setText(_translate("MainWindow", "POTWIERDŹ"))
         self.add_cancelButton.setText(_translate("MainWindow", "ANULUJ"))
-        self.byKris_label.setText(_translate("MainWindow", "By Kris"))
+        self.byKris_label.setText(_translate("MainWindow", "By Cocolak"))
 
     def loadListWidget(self):
         self.panel_listWidget.clear()
